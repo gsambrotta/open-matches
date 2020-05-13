@@ -1,0 +1,35 @@
+.logoWrap {
+  width: 20%;
+}
+
+.links {
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+.links a {
+  color: var(--backgroundColor);
+}
+
+.links a::after {
+  content: '';
+  display: block;
+  margin: auto;
+  margin-top: 4px;
+  height: 2px;
+  width: 0px;
+  background: transparent;
+  transition: width 0.5s ease, background-color 0.5s ease;
+  -webkit-transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+.links a:hover::after {
+  width: 100%;
+  background-color: var(--secondaryColor);
+}
