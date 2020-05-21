@@ -15,9 +15,10 @@
   "author": "designbygio",
   "license": "ISC",
   "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "@hapi/inert": "^6.0.1",
     "bcrypt": "^4.0.1",
     "dotenv": "^8.2.0",
-    "hapi": "^18.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.13",
     "nodemon": "^2.0.3"
