@@ -11,7 +11,7 @@ const prod = merge(common, {
     App: './src/index.js',
   },
   output: {
-    path: path.resolve(__dirname, '../', 'dist'),
+    path: path.resolve(__dirname, '../../', 'dist'),
     // can use "substitutions" in file names like [name] and [hash]
     // name will be `App` because that is specify in entry
     filename: '[name]_bundle.js',

@@ -25,23 +25,24 @@ const init = async () => {
     console.log(`inert plugin err: ${err}`)
   })
 
+  await server
+    .register({ plugin: UsersRoute }, { routes: { prefix: '/users' } })
+    .catch((err) => {
+      console.log(`routes register err: ${err}`)
+    })
+
   await server.route({
     method: 'GET',
     path: '/{path*}',
     handler: {
       directory: {
-        path: path.join(__dirname, '../../dist/'),
+        path: path.join(__dirname, '../dist/'),
+        // have a list of all the file in that folder
         listing: false,
         index: true,
       },
     },
   })
-
-  // await server
-  //   .register({ plugin: UsersRoute }, { routes: { prefix: '/users' } })
-  //   .catch((err) => {
-  //     console.log(`routes register err: ${err}`)
-  //   })
 
   await server.start()
   console.log(`server is running at: ${server.info.uri}`)

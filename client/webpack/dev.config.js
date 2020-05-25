@@ -5,7 +5,7 @@ const dev = merge(common, {
   devtool: 'inline-source-map',
   mode: 'development',
   devServer: {
-    contentBase: './dist',
+    contentBase: '../dist',
     port: 3000,
     historyApiFallback: true,
   },
