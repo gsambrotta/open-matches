@@ -11,7 +11,7 @@ const defaultValue = {
   passwordRepeat: '',
 }
 
-export default function LoginForm() {
+export default function SignupForm() {
   const [value, setValue] = useState(defaultValue)
   const [reveal, setReveal] = React.useState(false)
 

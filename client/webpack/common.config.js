@@ -1,3 +1,5 @@
+const path = require('path')
+
 /*
   webpack sees every file as a module.
   How to handle those files is up to loaders.
@@ -52,6 +54,15 @@ const images = {
 }
 
 const config = {
+  entry: {
+    App: './src/index.js',
+  },
+  output: {
+    path: path.resolve(__dirname, '../../', 'dist'),
+    // can use "substitutions" in file names like [name] and [hash]
+    // name will be `App` because that is specify in entry
+    filename: '[name]_bundle.js',
+  },
   module: {
     rules: [javascript, css, fonts, images, html],
   },

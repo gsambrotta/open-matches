@@ -8,6 +8,7 @@ import styles from './styles/base.css'
 import Header from './components/Header/Header'
 import Login from './components/Login/Login'
 import Signup from './components/Signup/Signup'
+import Registration from './components/Registration/Registration'
 
 class App extends React.Component {
   render() {
@@ -19,7 +20,7 @@ class App extends React.Component {
             <div className={styles.container}>
               <Switch>
                 <Route exact path='/'>
-                  <Signup />
+                  <Registration />
                 </Route>
                 <Route path='/signup' component={Signup} />
                 <Route path='/login' component={Login} />

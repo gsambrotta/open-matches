@@ -1,0 +1,10 @@
+.wrap {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 60px;
+}
+
+.footer {
+  color: var(--textColorContrast);
+  font-family: var(--headerFont);
+}

@@ -7,7 +7,7 @@
     "start-server": "cd server && npm start",
     "start": "npm run build-client && npm run start-server ",
     "dev-client": "cd client && npm start",
-    "dev": "npm run start-server && nrm run dev-client"
+    "dev": "concurrently --kill-others-on-fail --names \"🔙🔚,📱\" \"npm:start-server\"  \"npm:dev-client\" "
   },
   "keywords": [
     "matches",
