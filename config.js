@@ -9,4 +9,4 @@ var config = {
   },
 }
 
-var env = process.env.NODE_ENV === 'prod' ? config.prod : config.dev
+export default env = process.env.NODE_ENV === 'prod' ? config.prod : config.dev

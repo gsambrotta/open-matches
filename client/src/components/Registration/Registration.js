@@ -12,44 +12,51 @@ import {
 import { Button, ButtonPrimary } from '../CustomStyle/ButtonCustom'
 import styles from './registration.css'
 
+const defaultValues = {
+  name: '',
+  goal: '',
+  skills: [],
+  frequency: null,
+  timeOfDay: [],
+  weekDays: '',
+  projectDescription: '',
+  groupWork: false,
+}
+
 export default function RegistrationForm() {
-  const [value, setValue] = useState()
-  const [goal, setGoal] = useState()
-  const [frequency, setFrequency] = useState()
-  const [weekDays, setWeekDays] = useState()
-  const [timeOfDay, setTimeOfDay] = useState([])
-  const [groupWork, setGroupWork] = useState()
-  const [projectDescription, setProjectDescription] = useState()
-  const [visibleSteps, setVisibleSteps] = useState(1)
+  const [formValue, setFormValue] = useState(defaultValues)
+
+  // const [goal, setGoal] = useState()
+  // const [frequency, setFrequency] = useState()
+  // const [weekDays, setWeekDays] = useState()
+  // const [timeOfDay, setTimeOfDay] = useState([])
+  // const [groupWork, setGroupWork] = useState()
+  // const [projectDescription, setProjectDescription] = useState()
+
+  const [visibleStep, setVisibleStep] = useState(1)
   const timeOfDaysValues = ['morning', 'afternoon', 'evening']
-  const isLearner = goal && goal === 'I want to coach' ? false : true
+  let isLearner
 
-  function onCheck(event, value) {
-    if (event.target.checked) {
-      setTimeOfDay([...timeOfDay, value])
-    } else {
-      setTimeOfDay(timeOfDay.filter((item) => item !== value))
-    }
-  }
-
-  function renderRegistrationSteps(visibleSteps) {
-    switch (visibleSteps) {
+  function renderRegistrationSteps(visibleStep) {
+    switch (visibleStep) {
       case 1:
         return (
           <section>
             <h2>What is the main reason you come here?</h2>
             <RadioButtonGroup
               name='goal'
-              options={['I want to coach', 'I want to learn']}
-              value={goal}
-              onChange={(event) => {
-                setGoal(event.target.value)
+              options={[
+                { value: 'coach', label: 'I want to coach' },
+                { value: 'learner', label: 'I want to learn' },
+              ]}
+              // value={goal}
+              onChange={({ target: { value } }) => {
+                isLearner = value
+                // setFormValue(...formValue, { goal: value })
               }}
             />
 
-            <Button onClick={() => setVisibleSteps(2)}>
-              Go to next step >
-            </Button>
+            <Button onClick={() => setVisibleStep(2)}>Go to next step ></Button>
           </section>
         )
 
@@ -68,9 +75,7 @@ export default function RegistrationForm() {
               <TextInput type='name' name='name' placeholder='Your Name' />
             </FormField>
 
-            <Button onClick={() => setVisibleSteps(3)}>
-              Go to next step >
-            </Button>
+            <Button onClick={() => setVisibleStep(3)}>Go to next step ></Button>
           </section>
         )
 
@@ -84,9 +89,7 @@ export default function RegistrationForm() {
             />
             <h3>{`What do you want to ${isLearner ? 'learn' : 'coach'}`}?</h3>
             todo: autocomplete dropdown
-            <Button onClick={() => setVisibleSteps(4)}>
-              Go to next step >
-            </Button>
+            <Button onClick={() => setVisibleStep(4)}>Go to next step ></Button>
           </section>
         )
 
@@ -106,10 +109,14 @@ export default function RegistrationForm() {
             <FormField className='fieldGlobalStyle' name='daysPerWeek' required>
               <RadioButtonGroup
                 name='daysPerWeek'
-                options={['1 day', 'from 1 to 3 days', 'from 3 to 5 days']}
-                value={frequency}
+                options={[
+                  { value: 1, label: '1 day' },
+                  { value: 3, label: 'from 1 to 3 days' },
+                  { value: 5, label: 'from 3 to 5 days' },
+                ]}
+                // value={frequency}
                 onChange={(event) => {
-                  setFrequency(event.target.value)
+                  // setFormValue(event.target.value)
                 }}
               />
             </FormField>
@@ -121,7 +128,13 @@ export default function RegistrationForm() {
                   key={item}
                   checked={timeOfDay.includes(item)}
                   label={item}
-                  onChange={(event) => onCheck(event, item)}
+                  onChange={(event) => {
+                    if (event.target.checked) {
+                      // setFormValue([...timeOfDay, value])
+                    } else {
+                      // setFormValue(timeOfDay.filter((item) => item !== value))
+                    }
+                  }}
                 />
               ))}
             </FormField>
@@ -130,17 +143,19 @@ export default function RegistrationForm() {
             <FormField className='fieldGlobalStyle' name='weekDays' required>
               <RadioButtonGroup
                 name='weekDays'
-                options={['week days', 'weekend only', 'both works for me']}
-                value={weekDays}
-                onChange={(event) => {
-                  setWeekDays(event.target.value)
+                options={[
+                  { value: 'weekdays', label: 'week days' },
+                  { value: 'weekend', label: 'weekend only' },
+                  { value: 'all', label: 'both works for me' },
+                ]}
+                // value={weekDays}
+                onChange={({ target: { value } }) => {
+                  // setFormValue(value)
                 }}
               />
             </FormField>
 
-            <Button onClick={() => setVisibleSteps(5)}>
-              Go to next step >
-            </Button>
+            <Button onClick={() => setVisibleStep(5)}>Go to next step ></Button>
           </section>
         )
 
@@ -160,10 +175,8 @@ export default function RegistrationForm() {
                   or not
                 </h3>
                 <TextArea
-                  value={projectDescription}
-                  onChange={(event) =>
-                    setProjectDescription(event.target.value)
-                  }
+                  // value={projectDescription}
+                  // onChange={({ target: { value } }) => setFormValue(value)}
                   fill
                 />
               </Fragment>
@@ -173,14 +186,12 @@ export default function RegistrationForm() {
             <RadioButtonGroup
               name='groupWork'
               options={['yes', 'no']}
-              value={groupWork}
-              onChange={(event) => {
-                setGroupWork(event.target.value)
+              // value={groupWork}
+              onChange={({ target: { value } }) => {
+                // setGroupWork(value)
               }}
             />
-            <Button type='submit' onClick={() => console.log('submit')}>
-              See matches!
-            </Button>
+            <ButtonPrimary type='submit'>See matches!</ButtonPrimary>
           </section>
         )
     }
@@ -196,18 +207,18 @@ export default function RegistrationForm() {
         elevation='large'
         pad='large'>
         <Form
-          value={value}
+          value={formValue}
           onChange={(nextValue) => {
-            setValue(nextValue)
+            setFormValue(nextValue)
           }}
-          onSubmit={({ value: values, touched }) =>
-            console.log('submit', value)
+          onSubmit={({ value, touched }) =>
+            console.log('submit', value, touched)
           }
           validate='blur'>
-          {renderRegistrationSteps(visibleSteps)}
+          {renderRegistrationSteps(visibleStep)}
         </Form>
       </Box>
-      {visibleSteps === 1 && (
+      {visibleStep === 1 && (
         <Box direction='row' justify='center' margin={{ top: 'large' }}>
           <small className={styles.footer}>
             Don't worry, later you will have the possibility to create a double
