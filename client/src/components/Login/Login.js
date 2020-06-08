@@ -11,7 +11,7 @@ const defaultValue = {
   password: '',
 }
 
-export default function LoginForm(props) {
+export default function LoginForm() {
   const [value, setValue] = useState(defaultValue)
   const [reveal, setReveal] = useState(false)
   const [userNotFound, setUserNotFound] = useState(false)
@@ -43,7 +43,6 @@ export default function LoginForm(props) {
                 setValue(nextValue)
               }}
               onSubmit={async ({ value }) => {
-                console.log('value', value)
                 try {
                   const res = await fetch(`${env.API_URL}/api/login`, {
                     method: 'POST',

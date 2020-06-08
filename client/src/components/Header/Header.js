@@ -10,7 +10,7 @@ export default function Header() {
         <Link to='/'>logo</Link>
       </div>
       <div className={styles.links}>
-        <NavLink to='/hello' activeClassName={styles.active}>
+        <NavLink to='/about' activeClassName={styles.active}>
           about us
         </NavLink>
         <NavLink to='/signup' activeClassName={styles.active}>

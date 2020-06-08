@@ -34,7 +34,6 @@ exports.plugin = {
               })
               return userData
             } else {
-              console.log('error')
               return { userError: 'User already exists' }
             }
           })
