@@ -3,6 +3,9 @@
 Open source backbone platform to support educational organization to match their coaches and learners.
 The platform is intended to be clone and customize with specific brand.
 
+## Documentation
+Please find all the valuable information in the (Wiki)[https://github.com/gsambrotta/open-matches/wiki]
+
 ## How to start
 
 The project is based in Nodejs, npm, Mongodb.
@@ -16,9 +19,9 @@ Once you have the databse string, you can add to your `env` file and it will wor
 
 Once you clone the repo go ahead and install all the packages:
 * `npm i` must be run from `root`, from `client/` and from `server/` directory.
-* `cd / && npm i`
-* `cd /client && npm i`
-* `cd /server && npm i`
+* `cd open-matches && npm i`
+* `cd open-matches/client && npm i`
+* `cd open-matches/server && npm i`
 
 
 The project can run from `root` or you can run `client` and `server` separately from each respective diretcory.
