@@ -6,7 +6,7 @@ const Inert = require('@hapi/inert')
 const path = require('path')
 
 // import environmental variables
-require('dotenv').config({ path: 'env' })
+require('dotenv').config({ path: '../env' })
 
 const server = new Hapi.server({
   host: 'localhost',
@@ -25,11 +25,17 @@ const init = async () => {
     console.log(`inert plugin err: ${err}`)
   })
 
-  await server
-    .register({ plugin: UsersRoute }, { routes: { prefix: '/users' } })
-    .catch((err) => {
-      console.log(`routes register err: ${err}`)
-    })
+  await server.register({ plugin: UsersRoute }).catch((err) => {
+    console.log(`routes register err: ${err}`)
+  })
+
+  await server.route({
+    method: 'GET',
+    path: '/api/hello',
+    handler: (req, h) => {
+      return { text: 'Hello gioggi!' }
+    },
+  })
 
   await server.route({
     method: 'GET',
@@ -37,7 +43,7 @@ const init = async () => {
     handler: {
       directory: {
         path: path.join(__dirname, '../dist/'),
-        // have a list of all the file in that folder
+        // display a list of all the file in that folder
         listing: false,
         index: true,
       },

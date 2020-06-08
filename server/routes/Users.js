@@ -9,7 +9,7 @@ exports.plugin = {
   register: (server, options, next) => {
     server.route({
       method: 'POST',
-      path: '/signup',
+      path: '/api/signup',
       handler: (req, h) => {
         const userData = {
           email: req.payload.email,
@@ -25,15 +25,17 @@ exports.plugin = {
                 userData.password = hash
                 return User.create(userData)
                   .then((user) => {
-                    return { status: user.email + 'Signed up!!' }
+                    return
                   })
                   .catch((err) => {
-                    return `error: ${err}`
+                    console.log('error creating user')
+                    return
                   })
               })
               return userData
             } else {
-              return { error: 'User already exists' }
+              console.log('error')
+              return { userError: 'User already exists' }
             }
           })
           .catch((err) => {
@@ -43,36 +45,35 @@ exports.plugin = {
     }),
       server.route({
         method: 'POST',
-        path: '/login',
+        path: '/api/login',
         handler: (req, h) => {
           return User.findOne({ email: req.payload.email })
             .then((user) => {
               if (!user) {
-                return { error: user.email + "doesn't exist" }
+                return { noUserError: req.payload.email }
               } else {
                 if (bcrypt.compareSync(req.payload.password, user.password)) {
                   const payload = {
                     id: user._id,
                     email: user.email,
-                    //username: user.username
                   }
                   let token = jwt.sign(payload, process.env.SECRET_KEY, {
                     expiresIn: 1140,
                   })
-                  return token
+                  return { token }
                 } else {
-                  return { error: 'email or password are incorrect' }
+                  return { error: 'cannot retrieve token' }
                 }
               }
             })
             .catch((err) => {
-              return `error: ${err}`
+              return { error: err }
             })
         },
       }),
       server.route({
         method: 'GET',
-        path: '/my-profile',
+        path: '/api/my-profile',
         handler: (req, h) => {
           const decoded = jwt.verify(
             req.headers.authorization,

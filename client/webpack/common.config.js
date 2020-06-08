@@ -55,7 +55,7 @@ const images = {
 
 const config = {
   entry: {
-    App: './src/index.js',
+    App: ['@babel/polyfill', './src/index.js'],
   },
   output: {
     path: path.resolve(__dirname, '../../', 'dist'),

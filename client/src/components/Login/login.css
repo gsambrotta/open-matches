@@ -7,4 +7,5 @@
 .footer {
   color: var(--textColorContrast);
   font-family: var(--headerFont);
+  text-align: center;
 }
