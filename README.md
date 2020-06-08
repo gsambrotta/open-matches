@@ -4,7 +4,7 @@ Open source backbone platform to support educational organization to match their
 The platform is intended to be clone and customize with specific brand.
 
 ## Documentation
-Please find all the valuable information in the (Wiki)[https://github.com/gsambrotta/open-matches/wiki]
+Please find all the valuable information in the [Wiki](https://github.com/gsambrotta/open-matches/wiki)
 
 ## How to start
 
