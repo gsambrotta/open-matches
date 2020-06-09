@@ -3,6 +3,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
+const Joi = require('@hapi/joi')
 const User = require('../models/User')
 
 exports.plugin = {
@@ -10,6 +11,15 @@ exports.plugin = {
     server.route({
       method: 'POST',
       path: '/api/signup',
+      options: {
+        validate: {
+          payload: Joi.object({
+            email: Joi.string().required(),
+            password: Joi.string().required(),
+          }),
+          failAction: 'log',
+        },
+      },
       handler: (req, h) => {
         const userData = {
           email: req.payload.email,
@@ -45,6 +55,15 @@ exports.plugin = {
       server.route({
         method: 'POST',
         path: '/api/login',
+        options: {
+          validate: {
+            payload: Joi.object({
+              email: Joi.string().required(),
+              password: Joi.string().required(),
+            }),
+            failAction: 'log',
+          },
+        },
         handler: (req, h) => {
           return User.findOne({ email: req.payload.email })
             .then((user) => {

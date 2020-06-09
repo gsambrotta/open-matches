@@ -48,6 +48,7 @@ export default function LoginForm() {
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
+                      accept: 'application/json',
                     },
                     body: JSON.stringify({
                       email: value.email,
@@ -60,7 +61,13 @@ export default function LoginForm() {
                     return setUserNotFound(true)
                   }
 
+                  if (json.error) {
+                    // show validation that password is wrong
+                    return setUserNotFound(true)
+                  }
+
                   if (json && !json.error) {
+                    localStorage.setItem('userToken', json.token)
                     return history.push('/')
                   }
                 } catch (err) {
