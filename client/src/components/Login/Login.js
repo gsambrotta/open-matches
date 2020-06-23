@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { env } from '../../../../config'
 import { Form, FormField, TextInput, Box } from 'grommet'
 import { Button, ButtonPrimary } from '../CustomStyle/ButtonCustom'
 import { Hide, View } from 'grommet-icons'
+import { onLogin } from '../../functions/User'
 import styles from './login.css'
 
 const defaultValue = {
@@ -42,38 +42,9 @@ export default function LoginForm() {
               onChange={(nextValue) => {
                 setValue(nextValue)
               }}
-              onSubmit={async ({ value }) => {
-                try {
-                  const res = await fetch(`${env.API_URL}/api/login`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      accept: 'application/json',
-                    },
-                    body: JSON.stringify({
-                      email: value.email,
-                      password: value.password,
-                    }),
-                  })
-
-                  const json = await res.json()
-                  if (json.noUserError) {
-                    return setUserNotFound(true)
-                  }
-
-                  if (json.error) {
-                    // show validation that password is wrong
-                    return setUserNotFound(true)
-                  }
-
-                  if (json && !json.error) {
-                    localStorage.setItem('userToken', json.token)
-                    return history.push('/')
-                  }
-                } catch (err) {
-                  console.error(err)
-                }
-              }}
+              onSubmit={async ({ value }) =>
+                onLogin(value.email, value.password, setUserNotFound, history)
+              }
               validate='blur'>
               <FormField
                 className='fieldGlobalStyle'

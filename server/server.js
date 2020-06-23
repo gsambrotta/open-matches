@@ -1,7 +1,7 @@
 'use strict'
 const Hapi = require('@hapi/hapi')
 const mongoose = require('mongoose')
-const UsersRoute = require('./routes/Users')
+const routes = require('./routes')
 const Inert = require('@hapi/inert')
 const path = require('path')
 
@@ -25,17 +25,10 @@ const init = async () => {
     console.log(`inert plugin err: ${err}`)
   })
 
-  await server.register({ plugin: UsersRoute }).catch((err) => {
-    console.log(`routes register err: ${err}`)
-  })
-
-  await server.route({
-    method: 'GET',
-    path: '/api/hello',
-    handler: (req, h) => {
-      return { text: 'Hello gioggi!' }
-    },
-  })
+  // Add all the routes within the routes folder
+  for (let route in routes) {
+    server.route(routes[route])
+  }
 
   await server.route({
     method: 'GET',

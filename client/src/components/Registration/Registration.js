@@ -25,14 +25,6 @@ const defaultValues = {
 
 export default function RegistrationForm() {
   const [formValue, setFormValue] = useState(defaultValues)
-
-  // const [goal, setGoal] = useState()
-  // const [frequency, setFrequency] = useState()
-  // const [weekDays, setWeekDays] = useState()
-  // const [timeOfDay, setTimeOfDay] = useState([])
-  // const [groupWork, setGroupWork] = useState()
-  // const [projectDescription, setProjectDescription] = useState()
-
   const [visibleStep, setVisibleStep] = useState(1)
   const timeOfDaysValues = ['morning', 'afternoon', 'evening']
   let isLearner
@@ -49,10 +41,8 @@ export default function RegistrationForm() {
                 { value: 'coach', label: 'I want to coach' },
                 { value: 'learner', label: 'I want to learn' },
               ]}
-              // value={goal}
               onChange={({ target: { value } }) => {
                 isLearner = value
-                // setFormValue(...formValue, { goal: value })
               }}
             />
 
@@ -114,7 +104,6 @@ export default function RegistrationForm() {
                   { value: 3, label: 'from 1 to 3 days' },
                   { value: 5, label: 'from 3 to 5 days' },
                 ]}
-                // value={frequency}
                 onChange={(event) => {
                   // setFormValue(event.target.value)
                 }}
@@ -218,14 +207,14 @@ export default function RegistrationForm() {
           {renderRegistrationSteps(visibleStep)}
         </Form>
       </Box>
-      {visibleStep === 1 && (
+      {/* {visibleStep === 1 && (
         <Box direction='row' justify='center' margin={{ top: 'large' }}>
           <small className={styles.footer}>
             Don't worry, later you will have the possibility to create a double
             profile if you wish to learn and coach.
           </small>
         </Box>
-      )}
+      )} */}
     </section>
   )
 }

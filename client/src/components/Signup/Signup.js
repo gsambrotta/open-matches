@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from 'react'
-import { env } from '../../../../config'
 import { Link, useHistory } from 'react-router-dom'
 import { Form, FormField, TextInput, Box } from 'grommet'
 import { Button, ButtonPrimary } from '../CustomStyle/ButtonCustom'
 import { Hide, View } from 'grommet-icons'
+import { onSignup } from '../../functions/User'
 import styles from './signup.css'
 
 const defaultValue = {
@@ -15,18 +15,18 @@ const defaultValue = {
 export default function SignupForm() {
   const [value, setValue] = useState(defaultValue)
   const [reveal, setReveal] = useState(false)
-  const [userAlreadyFound, setUserAlreadyFound] = useState(false)
+  const [userAlreadyExist, setUserAlreadyExist] = useState(false)
   const history = useHistory()
 
   return (
     <section className={styles.wrap}>
-      {userAlreadyFound ? (
+      {userAlreadyExist ? (
         <Box direction='row' justify='center' margin={{ top: 'large' }}>
           <small className={styles.footer}>
             Look like that this user already exists. <br />
             Do you want to <Link to='/signup'>Login</Link>
-            <br />
-            or reset your password?
+            {/* <br />
+            or reset your password? */}
           </small>
         </Box>
       ) : (
@@ -43,31 +43,14 @@ export default function SignupForm() {
               onChange={(nextValue) => {
                 setValue(nextValue)
               }}
-              onSubmit={async ({ value }) => {
-                try {
-                  const res = await fetch(`${env.API_URL}/api/signup`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      email: value.email,
-                      password: value.password,
-                    }),
-                  })
-
-                  const json = await res.json()
-                  if (json.userError) {
-                    return setUserAlreadyFound(true)
-                  }
-
-                  if (json && !json.error) {
-                    return history.push('/')
-                  }
-                } catch (err) {
-                  console.error(err)
-                }
-              }}
+              onSubmit={async ({ value }) =>
+                onSignup(
+                  value.email,
+                  value.password,
+                  setUserAlreadyExist,
+                  history
+                )
+              }
               validate='blur'>
               <FormField
                 className='fieldGlobalStyle'

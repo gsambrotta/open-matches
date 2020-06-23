@@ -3,14 +3,8 @@ import styles from './header.css'
 import { NavLink, Link, useHistory } from 'react-router-dom'
 import { Header as HeaderGrommet } from 'grommet'
 
-export default function Header(props) {
+export default function Header({ onLogout }) {
   const history = useHistory()
-
-  function onLogout(e) {
-    e.preventDefault()
-    localStorage.removeItem('userToken')
-    return history.push(`/`)
-  }
 
   return (
     <HeaderGrommet background='brand' pad='medium'>
@@ -26,7 +20,7 @@ export default function Header(props) {
             <NavLink to='/profile' activeClassName={styles.active}>
               my profile
             </NavLink>
-            <a href='' onClick={(e) => onLogout(e)}>
+            <a href='' onClick={(e) => onLogout(e, history)}>
               logout
             </a>
           </Fragment>
