@@ -1,0 +1,9 @@
+extends ../email-template
+
+block content
+  h2 Verify OpenMatches Account
+  p Welcome to OpenMatches! Click the following button to continue on with the registration and start your learning joruney. Please note this link is only valid for the next hour.
+  +button(url, 'Confirm my email address →')
+  p If you can't click the above button please visit #{url}
+  br
+  p If you didn't request this email, please ignore it.

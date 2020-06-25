@@ -17,6 +17,7 @@ const UserSchema = new Schema({
     type: String,
     required: "Password can't be empty",
   },
+  isVerify: false,
   profile_id: {
     type: String,
   },

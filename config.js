@@ -9,4 +9,5 @@ var config = {
   },
 }
 
-export var env = process.env.NODE_ENV === 'prod' ? config.prod : config.dev
+const env = process.env.NODE_ENV === 'prod' ? config.prod : config.dev
+exports.env = env

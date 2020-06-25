@@ -57,3 +57,4 @@ mongoose.connection.on('error', (err) => {
 })
 
 init()
+// require('./services/Email')
