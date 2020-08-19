@@ -21,8 +21,14 @@ const UserSchema = new Schema({
   profile_id: {
     type: String,
   },
+  emailVerifyToken: {
+    type: String,
+  },
+  emailVerifyExpires: {
+    type: Date,
+  },
 })
 
-UserSchema.plugin(mongodbErrorHandler) // nice error hanlder
+UserSchema.plugin(mongodbErrorHandler) // nice error handler
 
 module.exports = User = mongoose.model('users', UserSchema)

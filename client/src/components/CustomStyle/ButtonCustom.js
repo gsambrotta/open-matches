@@ -9,4 +9,6 @@ export const ButtonPrimary = styled(Button)`
   color: var(--backgroundColor);
   text-transform: uppercase;
   font-size: 15px;
+  text-align: center;
+  padding: 20px 0;
 `

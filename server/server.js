@@ -18,6 +18,7 @@ const server = new Hapi.server({
 
 server.app.db = mongoose.connect(process.env.DATABASE, {
   useNewUrlParser: true,
+  useFindAndModify: false,
 })
 
 const init = async () => {

@@ -31,5 +31,8 @@
     "pug": "^3.0.0",
     "underscore": "^1.10.2",
     "validator": "^13.0.0"
+  },
+  "devDependencies": {
+    "moment": "^2.27.0"
   }
 }

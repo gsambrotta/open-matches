@@ -1,41 +1,17 @@
 import React from 'react'
 import { Box } from 'grommet'
-import { ButtonPrimary } from '../CustomStyle/ButtonCustom'
+import { ButtonPrimary } from '../components/CustomStyle/ButtonCustom'
+import styles from '../styles/common.css'
 
-export default function SignupForm() {
+export default function Welcome() {
   return (
     <section className={styles.wrap}>
-      <Box direction='row' justify='center' margin={{ top: 'large' }}>
-        <h2>Find a partner to start your learning journey</h2>
-
-        <Box direction='row' justify='center' margin={{ top: 'large' }}>
-          <ButtonPrimary
-            label='Signup'
-            primary
-            color='var(--brandColor)'
-            fill
-            a11yTitle='signup button'
-            href='/signup'
-          />
-        </Box>
-        <Box direction='row' justify='center' margin={{ top: 'large' }}>
-          <ButtonPrimary
-            label='Login'
-            primary
-            color='var(--brandColor)'
-            fill
-            a11yTitle='login button'
-            href='/login'
-          />
-        </Box>
+      <Box direction='column' justify='center' margin={{ top: 'large' }}>
+        <h2 className={styles.reverse}>
+          Find a partner to start your learning journey
+        </h2>
+        <p className={styles.reverse}>Some cool explanation of how it works</p>
       </Box>
-      <style jsx>{`
-        .wrap {
-          max-width: 400px;
-          margin: 0 auto;
-          margin-top: 60px;
-        }
-      `}</style>
     </section>
   )
 }

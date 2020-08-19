@@ -1,7 +1,7 @@
 const common = require('./common.config')
 const merge = require('webpack-merge')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const prod = merge(common, {
   devtool: 'source-map',
@@ -13,13 +13,10 @@ const prod = merge(common, {
     }),
   ],
   optimization: {
+    minimize: true,
     minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          compress: {
-            unused: false,
-          },
-        },
+      new TerserPlugin({
+        exclude: /\/node_modules/,
       }),
     ],
   },

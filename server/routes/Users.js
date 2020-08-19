@@ -19,6 +19,19 @@ module.exports = (function () {
       },
       handler: UsersController.signup,
     },
+    {
+      method: 'GET',
+      path: '/api/verifyEmail/{token}',
+      options: {
+        validate: {
+          params: Joi.object({
+            token: Joi.string().required(),
+          }),
+          failAction: 'log',
+        },
+      },
+      handler: UsersController.verifyEmail,
+    },
     // {
     //   method: 'POST',
     //   path: '/api/login',

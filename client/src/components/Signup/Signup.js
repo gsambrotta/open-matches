@@ -5,6 +5,7 @@ import { Button, ButtonPrimary } from '../CustomStyle/ButtonCustom'
 import { Hide, View } from 'grommet-icons'
 import { onSignup } from '../../functions/User'
 import styles from './signup.css'
+import commonStyles from '../../styles/common.css'
 
 const defaultValue = {
   email: '',
@@ -12,15 +13,24 @@ const defaultValue = {
   passwordRepeat: '',
 }
 
-export default function SignupForm() {
+export default function SignupForm({ isVerify, email }) {
   const [value, setValue] = useState(defaultValue)
   const [reveal, setReveal] = useState(false)
   const [userAlreadyExist, setUserAlreadyExist] = useState(false)
   const history = useHistory()
 
   return (
-    <section className={styles.wrap}>
-      {userAlreadyExist ? (
+    <section className={commonStyles.wrap}>
+      {!isVerify && email && (
+        <Box direction='row' justify='center' margin={{ top: 'large' }}>
+          <small className={styles.footer}>
+            We have sent an email to your account. Please go there and click on
+            the link we have sent to you to proceed with the registration.
+          </small>
+        </Box>
+      )}
+
+      {!isVerify && !email && userAlreadyExist && (
         <Box direction='row' justify='center' margin={{ top: 'large' }}>
           <small className={styles.footer}>
             Look like that this user already exists. <br />
@@ -29,7 +39,9 @@ export default function SignupForm() {
             or reset your password? */}
           </small>
         </Box>
-      ) : (
+      )}
+
+      {!isVerify && !email && (
         <Fragment>
           <Box
             a11yTitle='signup form'

@@ -7,10 +7,10 @@ module.exports = {
   sendTokenEmail,
 }
 
-function sendTokenEmail(userEmail, token, templateName) {
+function sendTokenEmail(userEmail, templateName, token) {
   // Better to do go to fake route and then make a call to endpoint + redirect or
   // we can also go directly to API endpoint and redirect?
-  const url = `${env.APP_URL}/verify/${token}`
+  const url = `${env.APP_URL}/verify?token=${token}`
 
   const email = new Mail({
     message: {

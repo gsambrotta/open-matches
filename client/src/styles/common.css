@@ -1,0 +1,9 @@
+.wrap {
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 60px;
+}
+
+.reverse {
+  color: white;
+}

@@ -5,6 +5,7 @@ import { Button, ButtonPrimary } from '../CustomStyle/ButtonCustom'
 import { Hide, View } from 'grommet-icons'
 import { onLogin } from '../../functions/User'
 import styles from './login.css'
+import commonStyles from '../../styles/common.css'
 
 const defaultValue = {
   email: '',
@@ -18,7 +19,7 @@ export default function LoginForm() {
   const history = useHistory()
 
   return (
-    <section className={styles.wrap}>
+    <section className={commonStyles.wrap}>
       {userNotFound ? (
         <Box direction='row' justify='center' margin={{ top: 'large' }}>
           <small className={styles.footer}>
@@ -43,7 +44,7 @@ export default function LoginForm() {
                 setValue(nextValue)
               }}
               onSubmit={async ({ value }) =>
-                onLogin(value.email, value.password, setUserNotFound, history)
+                x(value.email, value.password, setUserNotFound, history)
               }
               validate='blur'>
               <FormField

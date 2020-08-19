@@ -29,8 +29,11 @@ export async function onLogin(email, password, setUserNotFound, history) {
         // show error msg
       }
     } else {
-      localStorage.setItem('userToken', json.token)
-      return history.push('/')
+      if (json.profile_id) {
+        return history.push('/userProfile')
+      } else {
+        return history.push('/registration')
+      }
     }
   } catch (err) {
     console.error(err)
@@ -58,6 +61,30 @@ export async function onSignup(email, password, setUserAlreadyExist, history) {
       // todo: error handling screen
     } else {
       return history.push('/')
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export async function getUserById(id) {
+  try {
+    const res = await fetch(`${env.API_URL}/api/user/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    })
+
+    const json = await res.json()
+    if (json.error) {
+      return console.log('err user not found', json.error)
+    } else {
+      console.log('succ! user found', json)
+      return
     }
   } catch (err) {
     console.error(err)

@@ -4,13 +4,12 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import { Grommet } from 'grommet'
 import { theme } from './styles/theme.js'
 import styles from './styles/base.css'
-import { env } from '../../config'
-import jwt_decode from 'jwt-decode'
 
 import Header from './components/Header/Header'
 import Login from './components/Login/Login'
 import Signup from './components/Signup/Signup'
 import Welcome from './pages/Welcome'
+import VerifyEmail from './pages/VerifyEmail'
 import Registration from './components/Registration/Registration'
 import UserProfile from './components/UserProfile/UserProfile'
 import { onLogout } from './functions/User'
@@ -27,17 +26,11 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      decodedToken: '',
+      isVerify: false,
     }
   }
 
-  componentDidMount() {
-    // const token = localStorage.userToken
-    // const isLoggedin = localStorage.getItem('userToken')
-    // this.setState({
-    //   decodedToken: isLoggedin && jwt_decode(token),
-    // })
-  }
+  componentDidMount() {}
 
   render() {
     return (
@@ -49,13 +42,17 @@ class App extends React.Component {
               <Switch>
                 <Route exact path='/' component={Welcome} />
                 <Route path='/signup' component={Signup} />
+                <Route
+                  path='/verify'
+                  render={(props) => <VerifyEmail {...props} />}
+                />
                 <Route path='/login' component={Login} />
                 <Route path='/registration' component={Registration} />
                 <Route
                   exact
                   path='/profile'
                   render={(props) => (
-                    <UserProfile token={this.state.decodedToken} {...props} />
+                    <UserProfile isVerify={this.state.isVerify} {...props} />
                   )}
                 />
                 <Route component={ErrorPage} />

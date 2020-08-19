@@ -22,11 +22,12 @@ function generateJwtToken(user) {
 async function generateRefreshToken(user, ipAddress) {
   // create a refresh token that expires in 7 days
   const token = await RefreshToken.create({
-    user: user.id,
+    user: user._id,
     token: randomTokenString(),
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     createdByIp: ipAddress,
   })
+
   return token
 }
 
@@ -40,7 +41,8 @@ function setTokenCookie(h, token) {
     httpOnly: true,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   }
-  console.log('cookies', token, h.state)
+  debugger
   h.state('refreshToken', token, cookieOptions)
+
   return h.continue
 }
