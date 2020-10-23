@@ -1,15 +1,16 @@
 'use strict'
 const Hapi = require('@hapi/hapi')
 const mongoose = require('mongoose')
-const routes = require('./routes')
 const Inert = require('@hapi/inert')
-const HapiAuthJwt = require('hapi-auth-jwt2')
+// const HapiAuthJwt = require('hapi-auth-jwt2')
 //const jwt = require('jsonwebtoken'),
 
+const routes = require('./routes')
+const db = require('./models')
 // import environmental variables
 require('dotenv').config({ path: '../env' })
 
-const server = new Hapi.server({
+const server = Hapi.server({
   host: 'localhost',
   port: 5000,
   routes: {
@@ -17,44 +18,64 @@ const server = new Hapi.server({
   },
 })
 
-const validate = async function (user, request, h) {
-  // do your checks to see if the user is valid
-  if (!user.id) {
-    return console.log('user is not valid')
-  } else {
-    return console.log('user is valid')
-  }
-}
+const Role = db.role
 
-async function init() {
+const init = async () => {
   await server.register(Inert).catch((err) => {
     console.log(`inert plugin err: ${err}`)
   })
+  // await server.register(HapiAuthJwt).catch((err) => {
+  //   console.log(`jwt auth plugin err: ${err}`)
+  // })
 
-  await server.register(HapiAuthJwt).catch((err) => {
-    console.log(`jwt auth plugin err: ${err}`)
+  // Add role to DB if they don't exist yet
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: 'user',
+      }).save((err) => {
+        if (err) return console.log('error', err)
+        console.log('added *user* to roles collection')
+      })
+    }
   })
-  // strategy name and Schema are call 'jwt'
-  server.auth.strategy('jwt', 'jwt', {
-    key: process.env.SECRET_KEY,
-    validate,
-    verifyOptions: { algorithms: ['HS256'] },
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: 'moderator',
+      }).save((err) => {
+        if (err) return console.log('error', err)
+        console.log('added *moderator* to roles collection')
+      })
+    }
   })
-  server.auth.default('jwt') // so JWT auth is required for all routes
+  Role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: 'admin',
+      }).save((err) => {
+        if (err) return console.log('error', err)
+        console.log('added *admin* to roles collection')
+      })
+    }
+  })
 
   // Add all the routes within the routes folder
   for (let route in routes) {
     server.route(routes[route])
   }
 
-  await server.start((err) => {
-    if (err) throw err
+  await server.start()
+  console.log(`server is running at ${server.info.uri}`)
 
-    server.app.db = mongoose.connect(
+  server.app.db = mongoose
+    .connect(
       process.env.DATABASE,
       {
         useNewUrlParser: true,
+        useUnifiedTopology: true,
         useFindAndModify: false,
+        useCreateIndex: true,
       },
       (err) => {
         if (err) {
@@ -63,12 +84,14 @@ async function init() {
         }
       }
     )
-  })
-
-  process.on('unhandledRejection', (err) => {
-    console.log(err)
-    process.exit(1)
-  })
+    .then(() => {
+      console.log('Successfully connect to MongoDB')
+    })
 }
+
+process.on('unhandledRejection', (err) => {
+  console.log(err)
+  process.exit(1)
+})
 
 init()

@@ -7,14 +7,16 @@ module.exports = (function () {
   return [
     {
       method: 'GET',
-      path: '/{path*}',
-      handler: {
-        directory: {
-          path: path.join(__dirname, '../dist/'),
-          // display directory list of files in /dist folder
-          listing: false,
-          index: true,
-        },
+      // path: '/{path*}',
+      path: '/',
+      handler: (request, h) => {
+        return 'Hello World!'
+        // directory: {
+        //   path: path.join(__dirname, '../dist/'),
+        //   // display directory list of files in /dist folder
+        //   listing: false,
+        //   index: true,
+        // },
       },
       options: { auth: false },
     },

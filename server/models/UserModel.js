@@ -5,6 +5,9 @@ const validator = require('validator')
 const mongodbErrorHandler = require('mongoose-mongodb-errors')
 
 const UserSchema = new Schema({
+  username: {
+    type: String,
+  },
   email: {
     type: String,
     unique: true,
@@ -23,16 +26,16 @@ const UserSchema = new Schema({
       ref: 'Role',
     },
   ],
-  isVerify: false,
-  emailVerifyToken: {
-    type: String,
-  },
-  emailVerifyExpires: {
-    type: Date,
-  },
-  profile_id: {
-    type: String,
-  },
+  // isVerify: false,
+  // emailVerifyToken: {
+  //   type: String,
+  // },
+  // emailVerifyExpires: {
+  //   type: Date,
+  // },
+  // profile_id: {
+  //   type: String,
+  // },
 })
 
 UserSchema.plugin(mongodbErrorHandler) // nice error handler
