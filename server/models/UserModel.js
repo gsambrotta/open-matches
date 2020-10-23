@@ -17,15 +17,21 @@ const UserSchema = new Schema({
     type: String,
     required: "Password can't be empty",
   },
+  roles: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Role',
+    },
+  ],
   isVerify: false,
-  profile_id: {
-    type: String,
-  },
   emailVerifyToken: {
     type: String,
   },
   emailVerifyExpires: {
     type: Date,
+  },
+  profile_id: {
+    type: String,
   },
 })
 

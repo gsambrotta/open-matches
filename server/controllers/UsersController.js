@@ -1,14 +1,11 @@
 'use strict'
 
-const mongoose = require('mongoose')
 const Boom = require('@hapi/boom')
 const bcrypt = require('bcrypt')
 const moment = require('moment')
-const User = require('../models/User')
-const UserService = require('../services/Users')
-const UserHelper = require('../helpers/Users')
+const User = require('../models/UserModel')
 const Mail = require('../services/Email')
-const { randomTokenString } = require('../helpers/Users')
+const { randomTokenString, setTokenCookie } = require('../utils/usersFunctions')
 
 moment().format()
 
@@ -18,42 +15,45 @@ module.exports = {
   verifyEmail,
 }
 
+function hashPassword(password, cb) {
+  // Generate a salt at level 10 strength
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+      return cb(err, hash)
+    })
+  })
+}
+
 async function signup(req, h) {
   const { email, password } = req.payload
-  if (!email) {
-    return Boom.badRequest('Email field is required')
-  }
 
-  // check if user already exist
-  const user = await User.findOne({ email })
-  if (!user) {
-    // hash password
-    bcrypt.hash(password, 10, async (err, hash) => {
-      if (!err) {
-        const emailToken = randomTokenString()
+  // hash password
+  hashPassword(password, async (err, hash) => {
+    if (err) {
+      throw Boom.badRequest('Error creating the hash password', err)
+    }
 
-        // create new user on db
-        const newUser = await User.create({
-          email,
-          password: hash,
-          emailVerifyToken: emailToken,
-          emailVerifyExpires: moment().add(1, 'hours'),
-        })
+    const emailToken = randomTokenString()
 
-        // send email with verification token
-        Mail.sendTokenEmail(email, 'verify', emailToken)
-
-        return newUser
-      } else {
-        console.log('bad request')
-        return Boom.badRequest('Error creating the hash password')
-      }
+    // create new user on db
+    const newUser = await User.create({
+      email,
+      password: hash,
+      idToken: createToken(user),
+      emailVerifyToken: emailToken,
+      emailVerifyExpires: moment().add(1, 'hours'),
     })
-    return { email }
-  } else {
-    console.log('signup error')
-    return Boom.badRequest('User already exists')
-  }
+
+    if (newUser) {
+      // send email with verification token
+      Mail.sendTokenEmail(email, 'verify', emailToken)
+
+      return newUser
+      // res(newUser).code(201)
+    }
+  })
+  // return { email }
+  res(newUser).code(201)
 }
 
 async function login(req, h) {
@@ -107,7 +107,7 @@ async function verifyEmail(req, h) {
       ipAddress: req.ip,
       withVerifyToken: true,
     })
-    UserHelper.setTokenCookie(h, refreshToken)
+    setTokenCookie(h, refreshToken)
     const updatedUser = await User.findOneAndUpdate(
       {
         email: user.email,

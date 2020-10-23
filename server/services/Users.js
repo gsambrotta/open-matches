@@ -2,7 +2,7 @@
 
 const Boom = require('@hapi/boom')
 const bcrypt = require('bcrypt')
-const UserHelper = require('../helpers/Users')
+const UserHelper = require('../utils/usersFunctions')
 
 module.exports = {
   authenticate,
@@ -23,7 +23,6 @@ async function authenticate({ email, password, ipAddress, withVerifyToken }) {
 
   // create jwt token and refresh token
   const jwtToken = UserHelper.generateJwtToken(user)
-  console.log('jwtToken', jwtToken)
   const refreshToken = await UserHelper.generateRefreshToken(user, ipAddress)
   // return user and tokens
   return {

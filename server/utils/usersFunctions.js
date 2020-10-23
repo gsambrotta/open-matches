@@ -1,22 +1,31 @@
 'use strict'
 
+const User = require('../models/UserModel')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
-const RefreshToken = require('../models/RefreshToken')
+const RefreshToken = require('../models/RefreshTokenModel')
+const { badRequest } = require('@hapi/boom')
 
 module.exports = {
-  generateJwtToken,
+  verifyUserExist,
   generateRefreshToken,
   randomTokenString,
   setTokenCookie,
 }
 
-// HELPER FUNCTIONS
-function generateJwtToken(user) {
-  // create a jwt token containing the user id that expires in 15 minutes
-  return jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-    expiresIn: '15m',
-  })
+async function verifyUserExist(req, res) {
+  console.log('hallo?', req.payload.email)
+  const user = await User.findOne({ email: req.payload.email })
+  console.log('hallo2 ?')
+
+  if (user) {
+    console.log('user ?')
+    if (user.email === req.payload.email) {
+      res(badRequest('Email taken'))
+    }
+  }
+
+  res(req.payload)
 }
 
 async function generateRefreshToken(user, ipAddress) {
@@ -41,7 +50,6 @@ function setTokenCookie(h, token) {
     httpOnly: true,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
   }
-  debugger
   h.state('refreshToken', token, cookieOptions)
 
   return h.continue

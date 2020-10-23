@@ -3,7 +3,8 @@ const Hapi = require('@hapi/hapi')
 const mongoose = require('mongoose')
 const routes = require('./routes')
 const Inert = require('@hapi/inert')
-const path = require('path')
+const HapiAuthJwt = require('hapi-auth-jwt2')
+//const jwt = require('jsonwebtoken'),
 
 // import environmental variables
 require('dotenv').config({ path: '../env' })
@@ -16,46 +17,58 @@ const server = new Hapi.server({
   },
 })
 
-server.app.db = mongoose.connect(process.env.DATABASE, {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-})
+const validate = async function (user, request, h) {
+  // do your checks to see if the user is valid
+  if (!user.id) {
+    return console.log('user is not valid')
+  } else {
+    return console.log('user is valid')
+  }
+}
 
-const init = async () => {
+async function init() {
   await server.register(Inert).catch((err) => {
     console.log(`inert plugin err: ${err}`)
   })
+
+  await server.register(HapiAuthJwt).catch((err) => {
+    console.log(`jwt auth plugin err: ${err}`)
+  })
+  // strategy name and Schema are call 'jwt'
+  server.auth.strategy('jwt', 'jwt', {
+    key: process.env.SECRET_KEY,
+    validate,
+    verifyOptions: { algorithms: ['HS256'] },
+  })
+  server.auth.default('jwt') // so JWT auth is required for all routes
 
   // Add all the routes within the routes folder
   for (let route in routes) {
     server.route(routes[route])
   }
 
-  await server.route({
-    method: 'GET',
-    path: '/{path*}',
-    handler: {
-      directory: {
-        path: path.join(__dirname, '../dist/'),
-        // display a list of all the file in that folder
-        listing: false,
-        index: true,
+  await server.start((err) => {
+    if (err) throw err
+
+    server.app.db = mongoose.connect(
+      process.env.DATABASE,
+      {
+        useNewUrlParser: true,
+        useFindAndModify: false,
       },
-    },
+      (err) => {
+        if (err) {
+          console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`)
+          throw err
+        }
+      }
+    )
   })
 
-  await server.start()
-  console.log(`server is running at: ${server.info.uri}`)
+  process.on('unhandledRejection', (err) => {
+    console.log(err)
+    process.exit(1)
+  })
 }
 
-process.on('unhandledRejection', (err) => {
-  console.log(err)
-  process.exit(1)
-})
-
-mongoose.connection.on('error', (err) => {
-  console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`)
-})
-
 init()
-// require('./services/Email')
