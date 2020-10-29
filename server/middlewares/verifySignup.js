@@ -8,7 +8,7 @@ module.exports = {
   checkRolesExisted,
 }
 
-function checkDuplicateUsernameOrEmail(req, res) {
+function checkDuplicateUsernameOrEmail(req, h) {
   const { username, email } = req.payload
   console.log(username, email)
 
@@ -17,12 +17,12 @@ function checkDuplicateUsernameOrEmail(req, res) {
   }).exec((err, user) => {
     if (err) {
       console.log('Error finding user')
-      res(Boom.badImplementation('Error finding user'))
+      return Boom.badImplementation('Error finding user')
     }
 
     if (user) {
       console.log('Username already exist')
-      res(Boom.badRequest('Username already exist'))
+      return Boom.badRequest('Username already exist')
     }
 
     User.findOne({
@@ -30,26 +30,27 @@ function checkDuplicateUsernameOrEmail(req, res) {
     }).exec((err, user) => {
       if (err) {
         console.log('Error finding user email')
-        res(Boom.badImplementation('Error finding user'))
+        return Boom.badImplementation('Error finding user')
       }
 
       if (user) {
         console.log('Email already exist')
-        res(Boom.badRequest('Email already exist'))
+        return Boom.badRequest('Email already exist')
       }
     })
   })
-  console.log('What?')
+  return req
 }
 
 // check if roles in the request is legal or not
-function checkRolesExisted(req, res) {
+function checkRolesExisted(req, h) {
   const { roles } = req.payload
   if (roles) {
     for (let i = 0; i < roles.length; i++) {
       if (!ROLES.includes(roles[i])) {
-        res(Boom.badRequest(`${roles[i]} does not exist!`, err))
+        throw Boom.badRequest(`${roles[i]} does not exist!`, err)
       }
     }
   }
+  return req
 }

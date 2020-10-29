@@ -21,13 +21,13 @@ async function signup(req, h) {
 
   user.save((err, save) => {
     if (err) {
-      return Boom.badImplementation('Error saving user', err)
+      throw Boom.badImplementation('Error saving user', err)
     }
 
     if (roles) {
       Role.find({ name: { $in: roles } }, (err, roles) => {
         if (err) {
-          return Boom.badImplementation(
+          throw Boom.badImplementation(
             `This user doesn't have a role listed in ${roles}`,
             err
           )
@@ -36,23 +36,23 @@ async function signup(req, h) {
         user.roles = roles.map((role) => role._id)
         user.save((err) => {
           if (err) {
-            return Boom.badImplementation('Error saving role', err)
+            throw Boom.badImplementation('Error saving role', err)
           }
-          res({ message: 'User was registered successfully!' }).code(201)
+          h.response('User was registered successfully!').code(201)
         })
       })
     } else {
       Role.findOne({ name: 'user' }, (err, role) => {
         if (err) {
-          return Boom.badImplementation("No user with name: 'user'", err)
+          throw Boom.badImplementation("No user with name: 'user'", err)
         }
 
         user.roles = [role._id]
         user.save((err) => {
           if (err) {
-            return Boom.badImplementation('Error saving role', err)
+            throw Boom.badImplementation('Error saving role', err)
           }
-          res({ message: 'User was registered successfully!' }).code(201)
+          h.response('User was registered successfully!').code(201)
         })
       })
     }
