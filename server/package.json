@@ -25,7 +25,7 @@
     "email-templates": "^7.0.5",
     "glob": "^7.1.6",
     "hapi-auth-jwt2": "^10.1.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.9.13",
     "mongoose-mongodb-errors": "0.0.2",
     "nodemailer": "^6.4.10",
